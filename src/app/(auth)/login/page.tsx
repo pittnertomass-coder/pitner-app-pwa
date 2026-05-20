@@ -128,13 +128,19 @@ export default function LoginPage() {
         </div>
       )}
 
-      <CardFooter className="justify-center">
+      <CardFooter className="flex-col gap-3 items-center">
         <p className="text-sm text-muted-foreground">
           Nemáš účet?{" "}
           <Link href="/registrace" className="font-medium text-foreground underline underline-offset-4">
             Registruj se
           </Link>
         </p>
+        <a
+          href="https://narovnej.cz"
+          className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+        >
+          ← Zpět na narovnej.cz
+        </a>
       </CardFooter>
     </Card>
   );

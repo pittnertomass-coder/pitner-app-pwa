@@ -61,7 +61,7 @@ export function TrackCardButton({ track }: { track: AudioTrack }) {
       </div>
 
       {/* Track info */}
-      <div className="p-3 space-y-0.5">
+      <div className="p-3 space-y-0.5 h-[4.5rem]">
         <p className="font-semibold text-sm leading-snug line-clamp-2">{track.title}</p>
         <p className="text-xs tabular-nums" style={{ color: "oklch(var(--muted-foreground) / 1)" }}>
           {minutes} min
