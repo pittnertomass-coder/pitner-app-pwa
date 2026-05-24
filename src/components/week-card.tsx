@@ -21,16 +21,16 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
   if (isUnlocked) {
     const content = (
       <>
-        <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-primary" />
+        <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-white/40" />
         <div className="flex-1 min-w-0 pl-2">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: "rgba(0,212,160,0.8)" }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5 text-white/70">
             Týden {week}
           </p>
           <p className="text-lg font-bold leading-tight text-white">
             {trainings.length} {trainings.length === 1 ? "lekce" : trainings.length < 5 ? "lekce" : "lekcí"}
           </p>
           {completedInWeek > 0 && (
-            <p className="text-xs mt-0.5" style={{ color: "rgba(0,212,160,0.8)" }}>
+            <p className="text-xs mt-0.5 text-white/70">
               {completedInWeek} z {trainings.length} dokončeno
             </p>
           )}
@@ -39,7 +39,7 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
           {completedInWeek === trainings.length && trainings.length > 0 ? (
             <span className="text-2xl text-white">✓</span>
           ) : (
-            <ChevronRight className="h-5 w-5 text-white/80 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="h-5 w-5 text-white group-hover:translate-x-1 transition-transform" />
           )}
         </div>
       </>
@@ -48,8 +48,8 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
     const cardClass =
       "group relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer";
     const cardStyle = {
-      background: "linear-gradient(135deg, oklch(0.30 0.10 168) 0%, oklch(0.22 0.07 168) 100%)",
-      border: "1px solid oklch(0.45 0.12 168 / 0.5)",
+      background: "linear-gradient(135deg, #00D4A0 0%, #00B88A 100%)",
+      border: "none",
     };
 
     if (single) {
