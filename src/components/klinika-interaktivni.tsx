@@ -47,8 +47,8 @@ export function KlinikaInteraktivni() {
     <div className="flex flex-col md:flex-row gap-6 items-start">
 
       {/* Fotka s overlay tečkami */}
-      <div className="w-full md:w-[48%] shrink-0">
-        <div className="relative w-full max-w-[420px] mx-auto md:mx-0 select-none">
+      <div className="w-full md:w-[55%] shrink-0">
+        <div className="relative w-full select-none">
           <Image
             src="/brand/panáček klinika_result.webp"
             alt="Anatomický model těla"
