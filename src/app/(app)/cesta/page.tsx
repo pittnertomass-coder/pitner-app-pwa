@@ -50,7 +50,8 @@ export default async function CestaPage() {
     if (!weekMap[wk]) weekMap[wk] = [];
     weekMap[wk].push(t);
   }
-  const weeks = Object.keys(weekMap).map(Number).sort((a, b) => a - b);
+  const maxWeek = Math.max(8, ...Object.keys(weekMap).map(Number));
+  const weeks = Array.from({ length: maxWeek }, (_, i) => i + 1);
 
   return (
     <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-xl mx-auto flex flex-col gap-8">
@@ -103,7 +104,7 @@ export default async function CestaPage() {
           <WeekCard
             key={week}
             week={week}
-            trainings={weekMap[week]}
+            trainings={weekMap[week] ?? []}
             progressRecord={progressRecord}
             isUnlocked={week <= unlockedWeeks}
             daysUntilUnlock={(week - 1) * 7 - daysSince}

@@ -72,27 +72,33 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
     );
   }
 
+  const hasContent = trainings.length > 0;
+
   return (
     <div
-      className="relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 opacity-60"
+      className="relative overflow-hidden rounded-2xl p-5 flex items-center gap-4"
       style={{
-        background: "oklch(0.18 0.03 168 / 0.5)",
-        border: "1px solid oklch(0.30 0.05 168 / 0.4)",
+        background: "oklch(0.24 0.04 168 / 0.8)",
+        border: "1px solid oklch(0.45 0.08 168 / 0.5)",
       }}
     >
-      <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-muted-foreground/30" />
+      <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: "oklch(0.55 0.10 168 / 0.5)" }} />
       <div className="flex-1 min-w-0 pl-2">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-0.5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: "oklch(0.65 0.10 168)" }}>
           Týden {week}
         </p>
-        <p className="text-lg font-bold leading-tight text-muted-foreground">
-          {trainings.length} {trainings.length === 1 ? "lekce" : trainings.length < 5 ? "lekce" : "lekcí"}
+        <p className="text-lg font-bold leading-tight" style={{ color: "oklch(0.75 0.05 168)" }}>
+          {hasContent
+            ? `${trainings.length} ${trainings.length === 1 ? "lekce" : trainings.length < 5 ? "lekce" : "lekcí"}`
+            : "Připravujeme"}
         </p>
-        <p className="text-xs text-muted-foreground/60 mt-0.5">
-          Odemkne se za {daysUntilUnlock} {daysUntilUnlock === 1 ? "den" : daysUntilUnlock < 5 ? "dny" : "dní"}
+        <p className="text-xs mt-0.5" style={{ color: "oklch(0.55 0.07 168)" }}>
+          {hasContent
+            ? `Odemkne se za ${daysUntilUnlock} ${daysUntilUnlock === 1 ? "den" : daysUntilUnlock < 5 ? "dny" : "dní"}`
+            : "Obsah brzy přibude"}
         </p>
       </div>
-      <Lock className="h-5 w-5 shrink-0 text-muted-foreground/40" />
+      <Lock className="h-5 w-5 shrink-0" style={{ color: "oklch(0.55 0.08 168)" }} />
     </div>
   );
 }

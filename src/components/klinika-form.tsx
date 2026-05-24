@@ -16,7 +16,8 @@ export function KlinikaForm() {
     try {
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
-      await supabase.from("klinika_requests").insert({ message: text.trim() });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase as any).from("klinika_requests").insert({ message: text.trim() });
       toast.success("Odesláno! Tomáš se na to podívá.");
       setText("");
     } catch {

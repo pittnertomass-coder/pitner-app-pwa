@@ -116,6 +116,19 @@ export interface Database {
           order_index?: number;
         };
       };
+      klinika_requests: {
+        Row: {
+          id: string;
+          message: string;
+          created_at: string;
+        };
+        Insert: {
+          message: string;
+        };
+        Update: {
+          message?: string;
+        };
+      };
       user_audio_progress: {
         Row: {
           id: string;
