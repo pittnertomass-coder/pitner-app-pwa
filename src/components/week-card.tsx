@@ -48,8 +48,9 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
     const cardClass =
       "group relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer";
     const cardStyle = {
-      background: "linear-gradient(135deg, #00D4A0 0%, #00B88A 100%)",
+      background: "linear-gradient(105deg, #006B50 0%, #00A87C 55%, #00BF90 100%)",
       border: "none",
+      boxShadow: "-6px 4px 18px rgba(0,0,0,0.22), 0 2px 12px rgba(0,168,124,0.25)",
     };
 
     if (single) {
