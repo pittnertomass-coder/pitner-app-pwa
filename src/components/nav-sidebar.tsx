@@ -38,11 +38,11 @@ export function NavSidebar() {
       {/* Logo / branding */}
       <div className="mb-8 px-3 flex items-center gap-3">
         <Image
-          src="/brand/logo hlavní11_result.webp"
+          src="/brand/logo hlavní 33_result.webp"
           alt="Narovnej"
           width={110}
           height={110}
-          className="h-10 w-auto"
+          className="h-14 w-auto"
           priority
         />
         {profile?.full_name && (

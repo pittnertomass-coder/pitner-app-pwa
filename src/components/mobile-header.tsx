@@ -9,11 +9,11 @@ export function MobileHeader() {
   return (
     <header className="flex items-center gap-3 glass border-b border-border px-4 py-3 sticky top-0 z-40">
       <Image
-        src="/brand/logo hlavní11_result.webp"
+        src="/brand/logo hlavní 33_result.webp"
         alt="Narovnej"
         width={110}
         height={110}
-        className="h-8 w-auto"
+        className="h-11 w-auto"
         priority
       />
       <div className="flex-1 min-w-0">
