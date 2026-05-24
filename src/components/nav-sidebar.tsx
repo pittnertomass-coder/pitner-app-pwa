@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth-store";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { LogoMark } from "@/components/logo-mark";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -37,15 +37,17 @@ export function NavSidebar() {
     <aside className="flex h-full w-64 flex-col glass border-r border-border px-3 py-5">
       {/* Logo / branding */}
       <div className="mb-8 px-3 flex items-center gap-3">
-        <LogoMark size={36} />
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary/70">
-            Pitner Pohyb
-          </p>
-          {profile?.full_name && (
-            <p className="truncate text-sm font-semibold leading-tight">{profile.full_name}</p>
-          )}
-        </div>
+        <Image
+          src="/brand/logo hlavní11_result.webp"
+          alt="Narovnej"
+          width={110}
+          height={110}
+          className="h-10 w-auto"
+          priority
+        />
+        {profile?.full_name && (
+          <p className="truncate text-sm font-semibold leading-tight">{profile.full_name}</p>
+        )}
       </div>
 
       {/* Navigace */}
