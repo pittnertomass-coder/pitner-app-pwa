@@ -10,7 +10,7 @@ export function MobileHeader() {
         alt="Narovnej"
         width={110}
         height={110}
-        className="h-11 w-auto"
+        className="h-14 w-auto"
         priority
       />
     </header>

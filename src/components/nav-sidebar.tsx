@@ -42,7 +42,7 @@ export function NavSidebar() {
           alt="Narovnej"
           width={110}
           height={110}
-          className="h-14 w-auto"
+          className="h-20 w-auto"
           priority
         />
         {profile?.full_name && (
