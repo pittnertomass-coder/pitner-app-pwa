@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Route, Lock, ChevronRight } from "lucide-react";
+import { Route } from "lucide-react";
 import type { Profile, Training, UserProgress } from "@/types/database";
 import { isDevBypass, DEV_PROFILE, DEV_TRAININGS, DEV_PROGRESS } from "@/lib/dev-mock";
+import { WeekCard } from "@/components/week-card";
 
 export default async function CestaPage() {
   const devMode = await isDevBypass();
@@ -33,8 +33,9 @@ export default async function CestaPage() {
   }
 
   const isPremium = profile?.is_premium ?? false;
-  const progressMap = new Map(progress?.map((p) => [p.training_id, p]) ?? []);
-  const completedCount = Array.from(progressMap.values()).filter((p) => p.is_completed).length;
+  const progressRecord: Record<string, UserProgress> = {};
+  for (const p of progress ?? []) progressRecord[p.training_id] = p;
+  const completedCount = Object.values(progressRecord).filter((p) => p.is_completed).length;
   const totalCount = trainings?.length ?? 0;
 
   // Calculate unlocked weeks based on days since registration
@@ -43,13 +44,13 @@ export default async function CestaPage() {
   const unlockedWeeks = Math.floor(daysSince / 7) + 1;
 
   // Group trainings by week
-  const weekMap = new Map<number, Training[]>();
+  const weekMap: Record<number, Training[]> = {};
   for (const t of trainings ?? []) {
     const wk = t.week_number ?? 1;
-    if (!weekMap.has(wk)) weekMap.set(wk, []);
-    weekMap.get(wk)!.push(t);
+    if (!weekMap[wk]) weekMap[wk] = [];
+    weekMap[wk].push(t);
   }
-  const weeks = Array.from(weekMap.keys()).sort((a, b) => a - b);
+  const weeks = Object.keys(weekMap).map(Number).sort((a, b) => a - b);
 
   return (
     <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-xl mx-auto flex flex-col gap-8">
@@ -98,79 +99,16 @@ export default async function CestaPage() {
       )}
 
       <div className="flex flex-col gap-4">
-        {weeks.map((week) => {
-          const weekTrainings = weekMap.get(week)!;
-          const isUnlocked = week <= unlockedWeeks;
-          const daysUntilUnlock = (week - 1) * 7 - daysSince;
-          const completedInWeek = weekTrainings.filter((t) => progressMap.get(t.id)?.is_completed).length;
-
-          if (isUnlocked) {
-            return (
-              <Link
-                key={week}
-                href={`/cesta/tyden/${week}`}
-                className="group relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background: "linear-gradient(135deg, oklch(0.30 0.10 168) 0%, oklch(0.22 0.07 168) 100%)",
-                  border: "1px solid oklch(0.45 0.12 168 / 0.5)",
-                }}
-              >
-                {/* Mint accent line */}
-                <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-primary" />
-
-                <div className="flex-1 min-w-0 pl-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/70 mb-0.5">
-                    Týden {week}
-                  </p>
-                  <p className="text-lg font-bold leading-tight text-foreground">
-                    {weekTrainings.length} {weekTrainings.length === 1 ? "lekce" : weekTrainings.length < 5 ? "lekce" : "lekcí"}
-                  </p>
-                  {completedInWeek > 0 && (
-                    <p className="text-xs text-primary/70 mt-0.5">
-                      {completedInWeek} z {weekTrainings.length} dokončeno
-                    </p>
-                  )}
-                </div>
-
-                {/* Progress ring placeholder */}
-                <div className="shrink-0 flex flex-col items-center gap-1">
-                  {completedInWeek === weekTrainings.length && weekTrainings.length > 0 ? (
-                    <span className="text-2xl">✓</span>
-                  ) : (
-                    <ChevronRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform" />
-                  )}
-                </div>
-              </Link>
-            );
-          }
-
-          return (
-            <div
-              key={week}
-              className="relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 opacity-60"
-              style={{
-                background: "oklch(0.18 0.03 168 / 0.5)",
-                border: "1px solid oklch(0.30 0.05 168 / 0.4)",
-              }}
-            >
-              <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-muted-foreground/30" />
-
-              <div className="flex-1 min-w-0 pl-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-0.5">
-                  Týden {week}
-                </p>
-                <p className="text-lg font-bold leading-tight text-muted-foreground">
-                  {weekTrainings.length} {weekTrainings.length === 1 ? "lekce" : weekTrainings.length < 5 ? "lekce" : "lekcí"}
-                </p>
-                <p className="text-xs text-muted-foreground/60 mt-0.5">
-                  Odemkne se za {daysUntilUnlock} {daysUntilUnlock === 1 ? "den" : daysUntilUnlock < 5 ? "dny" : "dní"}
-                </p>
-              </div>
-
-              <Lock className="h-5 w-5 shrink-0 text-muted-foreground/40" />
-            </div>
-          );
-        })}
+        {weeks.map((week) => (
+          <WeekCard
+            key={week}
+            week={week}
+            trainings={weekMap[week]}
+            progressRecord={progressRecord}
+            isUnlocked={week <= unlockedWeeks}
+            daysUntilUnlock={(week - 1) * 7 - daysSince}
+          />
+        ))}
       </div>
 
     </div>

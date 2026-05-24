@@ -38,7 +38,7 @@ export function NavSidebar() {
       {/* Logo / branding */}
       <div className="mb-8 px-3 flex items-center gap-3">
         <Image
-          src="/brand/logo hlavní 33_result.webp"
+          src="/brand/logo hlavní 44_result.webp"
           alt="Narovnej"
           width={110}
           height={110}
