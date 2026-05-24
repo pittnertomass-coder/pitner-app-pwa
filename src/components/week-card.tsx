@@ -23,23 +23,23 @@ export function WeekCard({ week, trainings, progressRecord, isUnlocked, daysUnti
       <>
         <span className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-primary" />
         <div className="flex-1 min-w-0 pl-2">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/70 mb-0.5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: "rgba(0,212,160,0.8)" }}>
             Týden {week}
           </p>
-          <p className="text-lg font-bold leading-tight text-foreground">
+          <p className="text-lg font-bold leading-tight text-white">
             {trainings.length} {trainings.length === 1 ? "lekce" : trainings.length < 5 ? "lekce" : "lekcí"}
           </p>
           {completedInWeek > 0 && (
-            <p className="text-xs text-primary/70 mt-0.5">
+            <p className="text-xs mt-0.5" style={{ color: "rgba(0,212,160,0.8)" }}>
               {completedInWeek} z {trainings.length} dokončeno
             </p>
           )}
         </div>
         <div className="shrink-0">
           {completedInWeek === trainings.length && trainings.length > 0 ? (
-            <span className="text-2xl">✓</span>
+            <span className="text-2xl text-white">✓</span>
           ) : (
-            <ChevronRight className="h-5 w-5 text-primary group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="h-5 w-5 text-white/80 group-hover:translate-x-1 transition-transform" />
           )}
         </div>
       </>

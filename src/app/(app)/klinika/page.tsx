@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Stethoscope } from "lucide-react";
 import type { Profile } from "@/types/database";
 import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
-import { BodyMap } from "@/components/body-map";
+import { KlinikaInteraktivni } from "@/components/klinika-interaktivni";
 import { KlinikaForm } from "@/components/klinika-form";
 
 export default async function KlinikaPage() {
@@ -30,7 +30,7 @@ export default async function KlinikaPage() {
   const isPremium = profile?.is_premium ?? false;
 
   return (
-    <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-xl mx-auto flex flex-col gap-8">
+    <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-3xl mx-auto flex flex-col gap-8">
 
       <div className="space-y-1">
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary/60">
@@ -41,7 +41,7 @@ export default async function KlinikaPage() {
           Klinika
         </h1>
         <p className="text-muted-foreground text-sm pt-0.5">
-          Klikni na oblast která tě trápí
+          Najeď na oblast která tě trápí
         </p>
       </div>
 
@@ -54,7 +54,7 @@ export default async function KlinikaPage() {
       ) : (
         <>
           <div className="glass rounded-2xl p-6">
-            <BodyMap />
+            <KlinikaInteraktivni />
           </div>
 
           <KlinikaForm />
