@@ -31,6 +31,7 @@ export const DEV_TRAININGS: Training[] = [
     bunny_library_id: TEST_LIBRARY_ID,
     duration_seconds: 1800,
     order_index: 1,
+    week_number: 1,
     category: "cesta",
     timestamps: [
       { label: "Úvod", seconds: 0 },
@@ -51,6 +52,7 @@ export const DEV_TRAININGS: Training[] = [
     bunny_library_id: TEST_LIBRARY_ID,
     duration_seconds: 2400,
     order_index: 2,
+    week_number: 2,
     category: "cesta",
     timestamps: [
       { label: "Rozcvičení", seconds: 0 },
@@ -70,6 +72,7 @@ export const DEV_TRAININGS: Training[] = [
     bunny_library_id: TEST_LIBRARY_ID,
     duration_seconds: 1200,
     order_index: 1,
+    week_number: 1,
     category: "klinika",
     timestamps: [
       { label: "Úvod", seconds: 0 },

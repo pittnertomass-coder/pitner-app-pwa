@@ -39,6 +39,7 @@ export interface Database {
           bunny_library_id: string;
           duration_seconds: number;
           order_index: number;
+          week_number: number;
           category: "cesta" | "klinika";
           timestamps: Json;
           thumbnail_url: string | null;
@@ -51,6 +52,7 @@ export interface Database {
           bunny_library_id: string;
           duration_seconds?: number;
           order_index?: number;
+          week_number?: number;
           category?: "cesta" | "klinika";
           timestamps?: Json;
           thumbnail_url?: string | null;
