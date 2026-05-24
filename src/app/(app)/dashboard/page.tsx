@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Route, Stethoscope, Headphones, Flame, TrendingUp, Star } from "lucide-react";
+import { Route, Stethoscope, Headphones, Flame, Star } from "lucide-react";
 import type { Profile, Training, UserProgress, AudioTrack } from "@/types/database";
 import { isDevBypass, DEV_PROFILE, DEV_TRAININGS, DEV_PROGRESS, DEV_AUDIO_TRACKS } from "@/lib/dev-mock";
 
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
           <Link href="/poslech">
             <div className="glass glass-hover rounded-2xl p-5 flex items-center gap-4 cursor-pointer group">
               <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 group-hover:bg-primary/25 transition-colors">
-                <TrendingUp className="h-5 w-5 text-primary" />
+                <Headphones className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold">Strava & Myšlení</p>
