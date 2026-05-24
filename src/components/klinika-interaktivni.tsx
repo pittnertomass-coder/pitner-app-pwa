@@ -17,21 +17,21 @@ interface Zone {
 }
 
 const ZONES: Zone[] = [
-  { id: "hlava",    label: "Bolest hlavy",           available: false, dotX: 150, dotY: 16  },
-  { id: "krc",      label: "Bolest za krkem",         available: true,  dotX: 150, dotY: 40  },
-  { id: "rameno",   label: "Bolest ramene",           available: false, dotX: 198, dotY: 64  },
-  { id: "zada",     label: "Bolest zad (lopatky)",    available: true,  dotX: 150, dotY: 96  },
-  { id: "loket",    label: "Bolest lokte",            available: false, dotX: 245, dotY: 128 },
-  { id: "zapesti",  label: "Bolest zápěstí a prstů", available: false, dotX: 256, dotY: 168 },
-  { id: "beder",    label: "Bolest beder",            available: false, dotX: 150, dotY: 146 },
-  { id: "kriz",     label: "Bolest v kříži",          available: false, dotX: 150, dotY: 162 },
-  { id: "kycle",    label: "Bolest kyčle",            available: false, dotX: 168, dotY: 174 },
-  { id: "stehno",   label: "Bolest stehna",           available: false, dotX: 160, dotY: 200 },
-  { id: "koleno",   label: "Bolest kolene",           available: false, dotX: 155, dotY: 220 },
-  { id: "lytko",    label: "Bolest lýtka (křeče)",   available: false, dotX: 155, dotY: 250 },
-  { id: "kotnik",   label: "Bolest kotníku",          available: false, dotX: 150, dotY: 273 },
-  { id: "pata",     label: "Bolest paty",             available: false, dotX: 145, dotY: 284 },
-  { id: "chodidlo", label: "Bolest chodidla",         available: false, dotX: 150, dotY: 293 },
+  { id: "hlava",    label: "Bolest hlavy",           available: false, dotX: 150, dotY: 24  },
+  { id: "krc",      label: "Bolest za krkem",         available: true,  dotX: 150, dotY: 52  },
+  { id: "rameno",   label: "Bolest ramene",           available: false, dotX: 230, dotY: 67  },
+  { id: "zada",     label: "Bolest zad (lopatky)",    available: true,  dotX: 150, dotY: 90  },
+  { id: "loket",    label: "Bolest lokte",            available: false, dotX: 252, dotY: 148 },
+  { id: "zapesti",  label: "Bolest zápěstí a prstů", available: false, dotX: 258, dotY: 192 },
+  { id: "beder",    label: "Bolest beder",            available: false, dotX: 150, dotY: 150 },
+  { id: "kriz",     label: "Bolest v kříži",          available: false, dotX: 150, dotY: 168 },
+  { id: "kycle",    label: "Bolest kyčle",            available: false, dotX: 170, dotY: 176 },
+  { id: "stehno",   label: "Bolest stehna",           available: false, dotX: 160, dotY: 205 },
+  { id: "koleno",   label: "Bolest kolene",           available: false, dotX: 155, dotY: 228 },
+  { id: "lytko",    label: "Bolest lýtka (křeče)",   available: false, dotX: 155, dotY: 252 },
+  { id: "kotnik",   label: "Bolest kotníku",          available: false, dotX: 148, dotY: 270 },
+  { id: "pata",     label: "Bolest paty",             available: false, dotX: 140, dotY: 281 },
+  { id: "chodidlo", label: "Bolest chodidla",         available: false, dotX: 155, dotY: 288 },
 ];
 
 export function KlinikaInteraktivni() {
