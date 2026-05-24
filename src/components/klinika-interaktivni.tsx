@@ -113,17 +113,17 @@ export function KlinikaInteraktivni() {
               />
               <span className={cn(
                 "flex-1 text-[11px] font-medium leading-tight transition-colors duration-150",
-                isActive ? "text-primary" : zone.available ? "text-foreground" : "text-muted-foreground/50"
+                isActive ? "text-primary" : zone.available ? "text-foreground" : "text-muted-foreground"
               )}>
                 {zone.label}
               </span>
               {zone.available ? (
                 <ChevronRight className={cn(
                   "h-3 w-3 shrink-0 transition-all",
-                  isActive ? "text-primary" : "text-primary/45"
+                  isActive ? "text-primary" : "text-primary/60"
                 )} />
               ) : (
-                <span className="text-[8px] font-bold uppercase tracking-wider text-muted-foreground/28 shrink-0">brzy</span>
+                <span className="text-[8px] font-bold uppercase tracking-wider text-muted-foreground/60 shrink-0">brzy</span>
               )}
             </div>
           );
