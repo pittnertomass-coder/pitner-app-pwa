@@ -123,7 +123,7 @@ export function KlinikaInteraktivni() {
                   isActive ? "text-primary" : "text-primary/60"
                 )} />
               ) : (
-                <span className="text-[8px] font-bold uppercase tracking-wider text-muted-foreground/60 shrink-0">brzy</span>
+                <span className="text-[8px] font-bold uppercase tracking-wider shrink-0" style={{ color: MINT }}>brzy</span>
               )}
             </div>
           );
