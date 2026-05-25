@@ -10,11 +10,13 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
   const { currentTrack, isPlaying } = usePlayerStore();
 
   const isActive = currentTrack?.id === track.id;
+  const hasAudio = !!track.file_url;
   const minutes = track.duration_seconds > 0 ? Math.ceil(track.duration_seconds / 60) : null;
 
   return (
     <button
-      onClick={() => openAudio(track)}
+      onClick={() => hasAudio && openAudio(track)}
+      disabled={!hasAudio}
       className="group relative overflow-hidden rounded-2xl p-4 flex items-center gap-4 w-full text-left transition-all duration-200 active:scale-[0.98]"
       style={
         isActive
@@ -65,12 +67,14 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
         )}
       </div>
 
-      {/* Play indicator */}
+      {/* Play indicator / Brzy */}
       <div
         className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl transition-colors"
         style={{ background: isActive ? "rgba(255,255,255,0.15)" : "oklch(0.25 0.07 168 / 0.6)" }}
       >
-        {isActive && isPlaying ? (
+        {!hasAudio ? (
+          <span className="text-[9px] font-bold uppercase tracking-wide" style={{ color: "#00D4A0" }}>Brzy</span>
+        ) : isActive && isPlaying ? (
           <span className="flex gap-0.5 items-end h-4">
             <span className="w-1 rounded-full bg-white animate-pulse" style={{ height: "60%" }} />
             <span className="w-1 rounded-full bg-white animate-pulse" style={{ height: "100%", animationDelay: "0.15s" }} />
@@ -79,7 +83,7 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
         ) : isActive ? (
           <Pause className="h-4 w-4 text-white" fill="white" />
         ) : (
-          <Play className="h-4 w-4 group-hover:text-primary transition-colors" style={{ color: "#00D4A0", marginLeft: 1 }} fill="#00D4A0" />
+          <Play className="h-4 w-4" style={{ color: "#00D4A0", marginLeft: 1 }} fill="#00D4A0" />
         )}
       </div>
     </button>
