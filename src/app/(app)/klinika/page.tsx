@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 import { Stethoscope } from "lucide-react";
+import Image from "next/image";
 import type { Profile } from "@/types/database";
 import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
-import { KlinikaInteraktivni } from "@/components/klinika-interaktivni";
+import { KlinikaZony } from "@/components/klinika-zony";
 import { KlinikaForm } from "@/components/klinika-form";
 
 export default async function KlinikaPage() {
@@ -30,36 +31,65 @@ export default async function KlinikaPage() {
   const isPremium = profile?.is_premium ?? false;
 
   return (
-    <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-3xl mx-auto flex flex-col gap-8">
+    <div className="min-h-full flex flex-col">
 
-      <div className="space-y-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary/60">
-          Odborné vzdělávání
-        </p>
-        <h1 className="text-4xl font-bold tracking-tight leading-tight flex items-center gap-3">
-          <Stethoscope className="h-8 w-8 text-primary" />
-          Klinika
-        </h1>
-        <p className="text-muted-foreground text-sm pt-0.5">
-          Najeď na oblast která tě trápí
-        </p>
-      </div>
+      {/* Hero — gradient + panáček */}
+      <div
+        className="relative overflow-hidden flex items-end justify-center"
+        style={{
+          background: "linear-gradient(160deg, oklch(0.22 0.08 168) 0%, oklch(0.14 0.04 168) 100%)",
+          minHeight: 220,
+        }}
+      >
+        {/* Radial glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at 50% 120%, rgba(0,212,160,0.18) 0%, transparent 70%)" }}
+        />
 
-      {!isPremium ? (
-        <div className="glass rounded-2xl p-5 border border-amber-500/30 bg-amber-500/5">
-          <p className="text-sm text-amber-400 font-medium">
-            Pro přístup k videím potřebuješ Premium členství.
+        {/* Nadpis vlevo nahoře */}
+        <div className="absolute top-8 left-5 md:left-10 space-y-0.5 z-10">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary/70">
+            Odborné vzdělávání
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight leading-tight flex items-center gap-3 text-white">
+            <Stethoscope className="h-8 w-8 text-primary" />
+            Klinika
+          </h1>
+          <p className="text-white/60 text-sm pt-0.5">
+            Vyber oblast která tě trápí
           </p>
         </div>
-      ) : (
-        <>
-          <div className="glass rounded-2xl p-6">
-            <KlinikaInteraktivni />
-          </div>
 
-          <KlinikaForm />
-        </>
-      )}
+        {/* Panáček — dekorativní, vpravo */}
+        <div className="relative z-10 flex justify-center w-full">
+          <Image
+            src="/brand/panáček klinika_result.webp"
+            alt="Anatomický panáček"
+            width={300}
+            height={400}
+            className="object-contain select-none pointer-events-none"
+            style={{ maxHeight: 220, width: "auto", opacity: 0.92 }}
+            priority
+          />
+        </div>
+      </div>
+
+      {/* Obsah */}
+      <div className="flex-1 px-5 py-6 md:px-10 max-w-xl mx-auto w-full flex flex-col gap-6">
+
+        {!isPremium ? (
+          <div className="glass rounded-2xl p-5 border border-amber-500/30 bg-amber-500/5">
+            <p className="text-sm text-amber-400 font-medium">
+              Pro přístup k videím potřebuješ Premium členství.
+            </p>
+          </div>
+        ) : (
+          <KlinikaZony />
+        )}
+
+        <KlinikaForm />
+      </div>
 
     </div>
   );
