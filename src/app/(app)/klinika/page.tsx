@@ -62,7 +62,7 @@ export default async function KlinikaPage() {
         </div>
 
         {/* Panáček — dekorativní, vpravo */}
-        <div className="relative z-10 flex justify-center w-full">
+        <div className="absolute bottom-0 right-0 z-10">
           <Image
             src="/brand/panáček klinika_result.webp"
             alt="Anatomický panáček"
