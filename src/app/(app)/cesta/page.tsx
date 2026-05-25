@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Route } from "lucide-react";
 import type { Profile, Training, UserProgress } from "@/types/database";
 import { isDevBypass, DEV_PROFILE, DEV_TRAININGS, DEV_PROGRESS } from "@/lib/dev-mock";
-import { WeekCard } from "@/components/week-card";
+import { CestaTrainingCard } from "@/components/cesta-training-card";
 
 export default async function CestaPage() {
   const devMode = await isDevBypass();
@@ -35,23 +35,13 @@ export default async function CestaPage() {
   const isPremium = profile?.is_premium ?? false;
   const progressRecord: Record<string, UserProgress> = {};
   for (const p of progress ?? []) progressRecord[p.training_id] = p;
+
   const completedCount = Object.values(progressRecord).filter((p) => p.is_completed).length;
   const totalCount = trainings?.length ?? 0;
 
-  // Calculate unlocked weeks based on days since registration
   const registeredAt = profile?.created_at ? new Date(profile.created_at) : new Date();
   const daysSince = Math.floor((Date.now() - registeredAt.getTime()) / 86400000);
   const unlockedWeeks = Math.floor(daysSince / 7) + 1;
-
-  // Group trainings by week
-  const weekMap: Record<number, Training[]> = {};
-  for (const t of trainings ?? []) {
-    const wk = t.week_number ?? 1;
-    if (!weekMap[wk]) weekMap[wk] = [];
-    weekMap[wk].push(t);
-  }
-  const maxWeek = Math.max(8, ...Object.keys(weekMap).map(Number));
-  const weeks = Array.from({ length: maxWeek }, (_, i) => i + 1);
 
   return (
     <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-xl mx-auto flex flex-col gap-8">
@@ -100,14 +90,14 @@ export default async function CestaPage() {
       )}
 
       <div className="flex flex-col gap-4">
-        {weeks.map((week) => (
-          <WeekCard
-            key={week}
-            week={week}
-            trainings={weekMap[week] ?? []}
-            progressRecord={progressRecord}
-            isUnlocked={week <= unlockedWeeks}
-            daysUntilUnlock={(week - 1) * 7 - daysSince}
+        {(trainings ?? []).map((training, i) => (
+          <CestaTrainingCard
+            key={training.id}
+            training={training}
+            index={i + 1}
+            progress={progressRecord[training.id] ?? null}
+            isUnlocked={(training.week_number ?? 1) <= unlockedWeeks}
+            daysUntilUnlock={((training.week_number ?? 1) - 1) * 7 - daysSince}
           />
         ))}
       </div>
