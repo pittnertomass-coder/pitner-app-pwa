@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { Stethoscope } from "lucide-react";
 import Image from "next/image";
-import type { Profile } from "@/types/database";
-import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
+import type { Profile, Training } from "@/types/database";
+import { isDevBypass, DEV_PROFILE, DEV_TRAININGS } from "@/lib/dev-mock";
 import { KlinikaZony } from "@/components/klinika-zony";
 import { KlinikaForm } from "@/components/klinika-form";
 
@@ -10,22 +10,24 @@ export default async function KlinikaPage() {
   const devMode = await isDevBypass();
 
   let profile: Pick<Profile, "is_premium"> | null;
+  let trainings: Training[] | null;
 
   if (devMode) {
     profile = DEV_PROFILE;
+    trainings = DEV_TRAININGS.filter((t) => t.category === "klinika");
   } else {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    const profileRes = await supabase
-      .from("profiles")
-      .select("is_premium")
-      .eq("id", user.id)
-      .single();
+    const [profileRes, trainingsRes] = await Promise.all([
+      supabase.from("profiles").select("is_premium").eq("id", user.id).single(),
+      supabase.from("trainings").select("*").eq("category", "klinika").eq("is_published", true).order("order_index"),
+    ]);
 
     profile = profileRes.data as Pick<Profile, "is_premium"> | null;
+    trainings = trainingsRes.data as Training[] | null;
   }
 
   const isPremium = profile?.is_premium ?? false;
@@ -85,7 +87,7 @@ export default async function KlinikaPage() {
             </p>
           </div>
         ) : (
-          <KlinikaZony />
+          <KlinikaZony trainings={trainings ?? []} />
         )}
 
         <KlinikaForm />
