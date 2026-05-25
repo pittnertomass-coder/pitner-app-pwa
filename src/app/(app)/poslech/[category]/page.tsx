@@ -120,9 +120,9 @@ export default async function PoslechCategoryPage({
       {/* Seznam audio stop */}
       <div className="flex-1 px-5 py-6 md:px-10 max-w-xl mx-auto w-full">
         {tracks && tracks.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4">
-            {tracks.map((track) => (
-              <TrackCardButton key={track.id} track={track} />
+          <div className="flex flex-col gap-3">
+            {tracks.map((track, i) => (
+              <TrackCardButton key={track.id} track={track} index={i + 1} />
             ))}
           </div>
         ) : (
