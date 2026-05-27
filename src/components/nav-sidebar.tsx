@@ -35,9 +35,9 @@ export function NavSidebar() {
   }
 
   return (
-    <aside className="flex h-full w-64 flex-col glass border-r border-border px-3 py-5">
+    <aside className="flex h-full w-64 flex-col glass border-r border-border px-3 py-2">
       {/* Logo / branding */}
-      <div className="mb-8 flex flex-col items-center justify-center w-full">
+      <div className="mb-3 flex flex-col items-center justify-center w-full pt-1">
         <Image
           src="/brand/HLAVNI LOGO 1111 mint_result.webp"
           alt="Narovnej"
