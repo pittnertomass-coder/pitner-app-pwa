@@ -27,9 +27,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </div>
 
         <main className="flex-1 overflow-y-auto pb-20 md:pb-0">
-          <div className="md:hidden">
-            <MobileHeader />
-          </div>
           {children}
         </main>
 
