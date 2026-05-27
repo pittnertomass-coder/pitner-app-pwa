@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Route, Stethoscope, Headphones, LogOut, Sun, Moon } from "lucide-react";
+import { LayoutDashboard, Route, Stethoscope, Headphones, Wind, LogOut, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
@@ -18,6 +18,7 @@ const navItems = [
   { href: "/cesta", label: "Cesta", icon: Route },
   { href: "/klinika", label: "Klinika", icon: Stethoscope },
   { href: "/poslech", label: "Poslech", icon: Headphones },
+  { href: "/nastroje", label: "Nástroje", icon: Wind },
 ];
 
 export function NavSidebar() {
@@ -139,7 +140,6 @@ export function MobileNav() {
           </Link>
         );
       })}
-      <MobileThemeButton />
     </nav>
   );
 }
