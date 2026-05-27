@@ -1,6 +1,6 @@
 {
-  "name": "Tomáš Pitner – Členská sekce",
-  "short_name": "Pitner App",
+  "name": "app.narovnej",
+  "short_name": "Narovnej",
   "description": "Trénink, klinika a poslech – tvůj osobní program",
   "start_url": "/dashboard",
   "display": "standalone",

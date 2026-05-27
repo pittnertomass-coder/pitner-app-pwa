@@ -7,13 +7,13 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Tomáš Pitner – Členská sekce",
+  title: "app.narovnej",
   description: "Tvůj osobní program – trénink, klinika a poslech",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Pitner App",
+    title: "app.narovnej",
   },
 };
 
