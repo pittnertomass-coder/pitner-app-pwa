@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   description: "Tvůj osobní program – trénink, klinika a poslech",
   manifest: "/manifest.json",
   icons: {
-    icon: "/brand/HLAVNI LOGO 1111 mint_result.webp",
-    apple: "/brand/HLAVNI LOGO 1111 mint_result.webp",
+    icon: "/brand/logo hlavní 44_result1111.webp",
+    apple: "/brand/logo hlavní 44_result1111.webp",
   },
   appleWebApp: {
     capable: true,
