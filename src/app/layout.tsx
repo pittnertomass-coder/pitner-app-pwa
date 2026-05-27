@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   title: "app.narovnej",
   description: "Tvůj osobní program – trénink, klinika a poslech",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/brand/HLAVNI LOGO 1111 mint_result.webp",
+    apple: "/brand/HLAVNI LOGO 1111 mint_result.webp",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
