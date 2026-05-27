@@ -37,18 +37,15 @@ export function NavSidebar() {
   return (
     <aside className="flex h-full w-64 flex-col glass border-r border-border px-3 py-5">
       {/* Logo / branding */}
-      <div className="mb-8 px-3 flex items-center gap-3">
+      <div className="mb-8 flex flex-col items-center justify-center w-full">
         <Image
           src="/brand/HLAVNI LOGO 1111 mint_result.webp"
           alt="Narovnej"
-          width={110}
-          height={110}
-          className="h-20 w-auto"
+          width={200}
+          height={200}
+          className="w-full h-auto px-4"
           priority
         />
-        {profile?.full_name && (
-          <p className="truncate text-sm font-semibold leading-tight">{profile.full_name}</p>
-        )}
       </div>
 
       {/* Navigace */}
