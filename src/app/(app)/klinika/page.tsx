@@ -16,7 +16,7 @@ export default function KlinikaPage() {
       subtitle="Odborné vzdělávání zaměřené na tvé bolesti"
       items={[
         "20 oblastí bolesti — od hlavy až po chodidlo",
-        "Videa s konkrétními cviky od fyzioterapeuta",
+        "Videa s konkrétními cviky od pohybového terapeuta",
         "Interaktivní výběr podle místa bolesti",
         "Pomůcky dostupné doma bez posilovny",
       ]}
