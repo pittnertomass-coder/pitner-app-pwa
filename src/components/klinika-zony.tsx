@@ -155,11 +155,11 @@ export function KlinikaZony({ trainings }: Props) {
         {pomuckyOpen && (
           <div className="px-4 pb-4 pt-1 flex flex-col gap-1.5" style={{ background: "oklch(0.16 0.03 168 / 0.6)" }}>
             {POMUCKY.map((p, i) => (
-              <div key={i} className="flex items-start gap-3 py-1">
-                <span className="text-lg shrink-0">{p.emoji}</span>
+              <div key={i} className="flex items-start gap-3 py-1.5">
+                <span className="text-xl shrink-0">{p.emoji}</span>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold" style={{ color: "oklch(0.88 0.04 168)" }}>{p.label}</p>
-                  <p className="text-[11px] leading-snug" style={{ color: "oklch(0.60 0.05 168)" }}>{p.desc}</p>
+                  <p className="text-sm font-semibold text-foreground">{p.label}</p>
+                  <p className="text-xs leading-snug text-muted-foreground mt-0.5">{p.desc}</p>
                 </div>
               </div>
             ))}
