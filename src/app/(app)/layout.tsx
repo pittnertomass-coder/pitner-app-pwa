@@ -1,16 +1,16 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { NavSidebar, MobileNav } from "@/components/nav-sidebar";
-import { MobileHeader } from "@/components/mobile-header";
 import { AuthProvider } from "@/components/auth-provider";
 import { VideoSheet } from "@/components/video-sheet";
 import { AudioSheet } from "@/components/audio-sheet";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   // Dev bypass – přeskočí Supabase auth pro lokální testování
+  const openAccess = process.env.OPEN_ACCESS === "1";
   const isDev = process.env.NODE_ENV === "development";
   const cookieStore = await cookies();
-  const devSkip = isDev && cookieStore.get("dev_skip_auth")?.value === "1";
+  const devSkip = openAccess || (isDev && cookieStore.get("dev_skip_auth")?.value === "1");
 
   if (!devSkip) {
     const { createClient } = await import("@/lib/supabase/server");

@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import type { Profile, Training, UserProgress, AudioTrack } from "@/types/database";
 
 export async function isDevBypass(): Promise<boolean> {
+  if (process.env.OPEN_ACCESS === "1") return true;
   if (process.env.NODE_ENV !== "development") return false;
   const store = await cookies();
   return store.get("dev_skip_auth")?.value === "1";
