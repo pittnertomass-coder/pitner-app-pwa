@@ -1,107 +1,73 @@
-import { redirect } from "next/navigation";
 import { Route } from "lucide-react";
-import type { Profile, Training, UserProgress } from "@/types/database";
-import { isDevBypass, DEV_PROFILE, DEV_TRAININGS, DEV_PROGRESS } from "@/lib/dev-mock";
-import { CestaTrainingCard } from "@/components/cesta-training-card";
+import { Pripravujeme } from "@/components/pripravujeme";
+import { isDevBypass, DEV_TRAININGS, DEV_PROGRESS } from "@/lib/dev-mock";
+import type { Training, UserProgress } from "@/types/database";
 
 export default async function CestaPage() {
   const devMode = await isDevBypass();
 
-  let profile: Pick<Profile, "is_premium" | "created_at"> | null;
-  let trainings: Training[] | null;
-  let progress: UserProgress[] | null;
+  let trainings: Training[] = [];
+  let progress: UserProgress[] = [];
 
   if (devMode) {
-    profile = DEV_PROFILE;
     trainings = DEV_TRAININGS.filter((t) => t.category === "cesta");
     progress = DEV_PROGRESS;
   } else {
-    const { createClient } = await import("@/lib/supabase/server");
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/login");
-
-    const [profileRes, trainingsRes, progressRes] = await Promise.all([
-      supabase.from("profiles").select("is_premium, created_at").eq("id", user.id).single(),
-      supabase.from("trainings").select("*").eq("category", "cesta").eq("is_published", true).order("week_number").order("order_index"),
-      supabase.from("user_progress").select("*").eq("user_id", user.id),
-    ]);
-
-    profile = profileRes.data as Pick<Profile, "is_premium" | "created_at"> | null;
-    trainings = trainingsRes.data as Training[] | null;
-    progress = progressRes.data as UserProgress[] | null;
+    try {
+      const { createClient } = await import("@/lib/supabase/server");
+      const supabase = await createClient();
+      const [t, p] = await Promise.all([
+        supabase.from("trainings").select("*").eq("category", "cesta").eq("is_published", true).order("week_number").order("order_index"),
+        supabase.from("user_progress").select("*"),
+      ]);
+      trainings = (t.data as Training[]) ?? [];
+      progress = (p.data as UserProgress[]) ?? [];
+    } catch {}
   }
 
-  const isPremium = profile?.is_premium ?? false;
-  const progressRecord: Record<string, UserProgress> = {};
-  for (const p of progress ?? []) progressRecord[p.training_id] = p;
-
-  const completedCount = Object.values(progressRecord).filter((p) => p.is_completed).length;
-  const totalCount = trainings?.length ?? 0;
-
-  const registeredAt = profile?.created_at ? new Date(profile.created_at) : new Date();
-  const daysSince = Math.floor((Date.now() - registeredAt.getTime()) / 86400000);
-  const unlockedWeeks = Math.floor(daysSince / 7) + 1;
-
   return (
-    <div className="min-h-full px-5 py-8 md:px-10 md:py-10 max-w-xl mx-auto flex flex-col gap-8">
-
-      <div className="space-y-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary/60">
-          Tréninkový program
-        </p>
-        <h1 className="text-4xl font-bold tracking-tight leading-tight flex items-center gap-3">
-          <Route className="h-8 w-8 text-primary" />
-          Cesta
-        </h1>
-        <p className="text-muted-foreground text-sm pt-0.5">
-          Tvůj program krok za krokem
-        </p>
-      </div>
-
-      {totalCount > 0 && (
-        <div className="glass rounded-2xl p-5 space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-              Postup
-            </span>
-            <span className="text-sm font-bold text-primary tabular-nums">
-              {completedCount} / {totalCount}
-            </span>
+    <Pripravujeme
+      icon={Route}
+      title="Cesta"
+      subtitle="Tvůj tréninkový program krok za krokem"
+      items={[
+        "Týdenní tréninkový plán přizpůsobený tvému tělu",
+        "Videa s odborným vedením od Tomáše Pitnera",
+        "Sledování pokroku a dokončených lekcí",
+        "Postupné odemykání obsahu každý týden",
+      ]}
+    >
+      <div className="flex flex-col gap-4 py-2">
+        {trainings.slice(0, 5).map((t, i) => (
+          <div
+            key={t.id}
+            className="rounded-2xl p-5 flex items-center gap-4"
+            style={{
+              background: "linear-gradient(105deg, #006B50 0%, #00A87C 55%, #00BF90 100%)",
+            }}
+          >
+            <div className="flex-1 min-w-0 pl-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5 text-white/70">Týden {i + 1}</p>
+              <p className="text-lg font-bold text-white truncate">{t.title}</p>
+            </div>
+            <span className="text-white/70 text-2xl">›</span>
           </div>
-          <div className="h-1.5 rounded-full bg-primary/12 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-700"
-              style={{ width: `${totalCount > 0 ? Math.max(2, Math.round((completedCount / totalCount) * 100)) : 2}%` }}
-            />
+        ))}
+        {[...Array(Math.max(0, 5 - trainings.length))].map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl p-5 flex items-center gap-4"
+            style={{ background: "oklch(0.24 0.04 168 / 0.8)", border: "1px solid oklch(0.45 0.08 168 / 0.5)" }}
+          >
+            <div className="flex-1 pl-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: "oklch(0.65 0.10 168)" }}>
+                Týden {trainings.length + i + 1}
+              </p>
+              <p className="text-lg font-bold" style={{ color: "oklch(0.75 0.05 168)" }}>Připravujeme</p>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {completedCount} z {totalCount} lekcí dokončeno
-          </p>
-        </div>
-      )}
-
-      {!isPremium && (
-        <div className="glass rounded-2xl p-5 border border-amber-500/30 bg-amber-500/5">
-          <p className="text-sm text-amber-400 font-medium">
-            Pro přístup k videím potřebuješ Premium členství.
-          </p>
-        </div>
-      )}
-
-      <div className="flex flex-col gap-4">
-        {(trainings ?? []).map((training, i) => (
-          <CestaTrainingCard
-            key={training.id}
-            training={training}
-            index={i + 1}
-            progress={progressRecord[training.id] ?? null}
-            isUnlocked={(training.week_number ?? 1) <= unlockedWeeks}
-            daysUntilUnlock={((training.week_number ?? 1) - 1) * 7 - daysSince}
-          />
         ))}
       </div>
-
-    </div>
+    </Pripravujeme>
   );
 }

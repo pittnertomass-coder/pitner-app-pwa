@@ -2,7 +2,6 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, Dumbbell, Utensils, Brain } from "lucide-react";
 import type { Profile, AudioTrack } from "@/types/database";
-import { isDevBypass, DEV_PROFILE, DEV_AUDIO_TRACKS } from "@/lib/dev-mock";
 import { TrackCardButton } from "@/components/track-card-button";
 
 const CATEGORY_META: Record<string, {
@@ -48,14 +47,20 @@ export default async function PoslechCategoryPage({
   const meta = CATEGORY_META[category];
   if (!meta) notFound();
 
-  const devMode = await isDevBypass();
+  const openAccess = process.env.OPEN_ACCESS === "1";
 
-  let profile: Pick<Profile, "is_premium"> | null;
   let tracks: AudioTrack[] | null;
 
-  if (devMode) {
-    profile = DEV_PROFILE;
-    tracks = DEV_AUDIO_TRACKS.filter((t) => t.category === meta.dbCategory);
+  if (openAccess) {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    const tracksRes = await supabase
+      .from("audio_tracks")
+      .select("*")
+      .eq("category", meta.dbCategory)
+      .eq("is_published", true)
+      .order("order_index");
+    tracks = tracksRes.data as AudioTrack[] | null;
   } else {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
@@ -72,11 +77,10 @@ export default async function PoslechCategoryPage({
         .order("order_index"),
     ]);
 
-    profile = profileRes.data as Pick<Profile, "is_premium"> | null;
+    const profile = profileRes.data as Pick<Profile, "is_premium"> | null;
+    if (!profile?.is_premium) redirect("/poslech");
     tracks = tracksRes.data as AudioTrack[] | null;
   }
-
-  if (!profile?.is_premium) redirect("/poslech");
 
   const Icon = meta.icon;
 
