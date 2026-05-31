@@ -6,6 +6,7 @@ const PREVIEW_TRAININGS = DEV_TRAININGS.filter((t) => t.category === "cesta");
 
 export default function CestaPage() {
   return (
+    // TEST v3
     <Pripravujeme
       icon={Route}
       title="Cesta"
