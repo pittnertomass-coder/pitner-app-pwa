@@ -144,9 +144,14 @@ export function KlinikaZony({ trainings }: Props) {
           className="w-full flex items-center justify-between px-4 py-3.5 text-left transition-colors"
           style={{ background: "oklch(0.18 0.04 168 / 0.7)" }}
         >
-          <span className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: "#00D4A0" }}>
-            Co budeš potřebovat
-          </span>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: "#00D4A0" }}>
+              Co se může vyskytnout v cvičení
+            </span>
+            <p className="text-[10px] mt-0.5" style={{ color: "oklch(0.55 0.06 168)" }}>
+              Nemusíš mít vše — záleží na konkrétním cviku
+            </p>
+          </div>
           <ChevronDown
             className="h-4 w-4 transition-transform duration-200"
             style={{ color: "#00D4A0", transform: pomuckyOpen ? "rotate(180deg)" : "rotate(0deg)" }}
