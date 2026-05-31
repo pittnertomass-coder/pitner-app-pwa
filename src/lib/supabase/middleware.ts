@@ -33,11 +33,13 @@ export async function updateSession(request: NextRequest) {
   const isAppRoute = url.pathname.startsWith("/dashboard") ||
     url.pathname.startsWith("/cesta") ||
     url.pathname.startsWith("/klinika") ||
-    url.pathname.startsWith("/poslech");
+    url.pathname.startsWith("/poslech") ||
+    url.pathname.startsWith("/nastroje");
 
-  // Dev bypass — cookie "dev_skip_auth=1" přeskočí ověření
-  const devSkip = process.env.NODE_ENV === "development" &&
-    request.cookies.get("dev_skip_auth")?.value === "1";
+  // Bypass — OPEN_ACCESS=1 nebo dev cookie
+  const devSkip = process.env.OPEN_ACCESS === "1" ||
+    (process.env.NODE_ENV === "development" &&
+    request.cookies.get("dev_skip_auth")?.value === "1");
 
   if (!user && isAppRoute && !devSkip) {
     url.pathname = "/login";
