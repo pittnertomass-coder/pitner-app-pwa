@@ -5,6 +5,23 @@ import type { Database } from "@/types/database";
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
+  const url = request.nextUrl.clone();
+  const isAuthRoute = url.pathname.startsWith("/login") || url.pathname.startsWith("/registrace");
+  const isAppRoute = url.pathname.startsWith("/dashboard") ||
+    url.pathname.startsWith("/cesta") ||
+    url.pathname.startsWith("/klinika") ||
+    url.pathname.startsWith("/poslech") ||
+    url.pathname.startsWith("/nastroje");
+
+  // V open-access módu přeskočíme Supabase úplně — žádný auth check
+  const devSkip = process.env.OPEN_ACCESS === "1" ||
+    (process.env.NODE_ENV === "development" &&
+    request.cookies.get("dev_skip_auth")?.value === "1");
+
+  if (devSkip) {
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -26,22 +43,15 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    // Supabase nedostupná — pokračuj bez uživatele
+  }
 
-  const url = request.nextUrl.clone();
-  const isAuthRoute = url.pathname.startsWith("/login") || url.pathname.startsWith("/registrace");
-  const isAppRoute = url.pathname.startsWith("/dashboard") ||
-    url.pathname.startsWith("/cesta") ||
-    url.pathname.startsWith("/klinika") ||
-    url.pathname.startsWith("/poslech") ||
-    url.pathname.startsWith("/nastroje");
-
-  // Bypass — OPEN_ACCESS=1 nebo dev cookie
-  const devSkip = process.env.OPEN_ACCESS === "1" ||
-    (process.env.NODE_ENV === "development" &&
-    request.cookies.get("dev_skip_auth")?.value === "1");
-
-  if (!user && isAppRoute && !devSkip) {
+  if (!user && isAppRoute) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
