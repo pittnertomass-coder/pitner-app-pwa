@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Dumbbell, Utensils, Brain } from "lucide-react";
+import { ChevronLeft, Dumbbell, Utensils, Brain, Zap } from "lucide-react";
 import type { Profile, AudioTrack } from "@/types/database";
 import { TrackCardButton } from "@/components/track-card-button";
 
@@ -35,6 +35,14 @@ const CATEGORY_META: Record<string, {
     gradient: "linear-gradient(135deg, oklch(0.52 0.2 280), oklch(0.35 0.15 280))",
     dbCategory: "mysleni",
     pillar: 3,
+  },
+  motivace: {
+    label: "Motivace",
+    subtitle: "Facka realitou",
+    icon: Zap,
+    gradient: "linear-gradient(135deg, oklch(0.65 0.22 32), oklch(0.45 0.20 22))",
+    dbCategory: "motivace",
+    pillar: 4,
   },
 };
 
