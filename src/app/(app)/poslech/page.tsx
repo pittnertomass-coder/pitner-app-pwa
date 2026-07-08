@@ -155,25 +155,20 @@ export default async function PoslechPage() {
             );
           })}
 
-          {/* Ostatní kategorie – vzor: 2 půlky, 1 celá, 2 půlky, 1 celá... */}
+          {/* 2×2 grid – Strava, Mysl, Motivace, Suplementy */}
           <div className="grid grid-cols-2 gap-4">
-            {CATEGORIES.filter((c) => !c.hero).map((cat, i, arr) => {
+            {CATEGORIES.filter((c) => !c.hero).map((cat, i) => {
               const Icon = cat.icon;
               const likeCount = seriesLikes[cat.dbCategory] ?? 0;
-              // Každá 3. karta (index 2, 5, 8...) je celá šířka.
-              // Také poslední karta bez páru (sama na začátku skupiny) je celá šířka.
-              const posInGroup = i % 3;
-              const isFull = posInGroup === 2 || (posInGroup === 0 && i === arr.length - 1);
               return (
-                <Link key={cat.id} href={`/poslech/${cat.id}`} className={isFull ? "col-span-2" : ""}>
+                <Link key={cat.id} href={`/poslech/${cat.id}`}>
                   <div
                     className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-[0.97] transition-transform duration-200"
-                    style={{ background: cat.gradient, minHeight: isFull ? 120 : 160 }}
+                    style={{ background: cat.gradient, minHeight: 160 }}
                   >
                     <div className="absolute inset-0 opacity-10"
                       style={{ background: "radial-gradient(circle at 80% 20%, white, transparent 60%)" }}
                     />
-                    {/* Odznak s počtem lajků */}
                     {likeCount > 0 && (
                       <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold text-white"
                         style={{ background: "oklch(0 0 0 / 0.30)" }}>
@@ -181,7 +176,7 @@ export default async function PoslechPage() {
                         {likeCount}
                       </div>
                     )}
-                    <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: isFull ? 120 : 160 }}>
+                    <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: 160 }}>
                       <div
                         className="flex h-11 w-11 items-center justify-center rounded-xl"
                         style={{ background: "oklch(1 0 0 / 0.15)" }}
