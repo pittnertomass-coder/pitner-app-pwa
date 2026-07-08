@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Headphones, Dumbbell, Utensils, Brain, Zap, ThumbsUp } from "lucide-react";
+import { Headphones, Dumbbell, Utensils, Brain, Zap, Pill, ThumbsUp } from "lucide-react";
 import type { Profile } from "@/types/database";
 import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
 
@@ -43,6 +43,16 @@ const CATEGORIES = [
     icon: Zap,
     gradient: "linear-gradient(135deg, oklch(0.65 0.22 32), oklch(0.45 0.20 22))",
     accent: "#F97316",
+    hero: false,
+  },
+  {
+    id: "suplementy",
+    dbCategory: "suplementy",
+    label: "Suplementační realita",
+    subtitle: "Co funguje a co je mýtus",
+    icon: Pill,
+    gradient: "linear-gradient(135deg, oklch(0.52 0.18 232), oklch(0.35 0.14 232))",
+    accent: "#38BDF8",
     hero: false,
   },
 ];
@@ -149,13 +159,12 @@ export default async function PoslechPage() {
           <div className="grid grid-cols-2 gap-4">
             {CATEGORIES.filter((c) => !c.hero).map((cat, i) => {
               const Icon = cat.icon;
-              const isLast = i === CATEGORIES.filter((c) => !c.hero).length - 1;
               const likeCount = seriesLikes[cat.dbCategory] ?? 0;
               return (
-                <Link key={cat.id} href={`/poslech/${cat.id}`} className={isLast ? "col-span-2" : ""}>
+                <Link key={cat.id} href={`/poslech/${cat.id}`}>
                   <div
                     className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-[0.97] transition-transform duration-200"
-                    style={{ background: cat.gradient, minHeight: isLast ? 120 : 160 }}
+                    style={{ background: cat.gradient, minHeight: 160 }}
                   >
                     <div className="absolute inset-0 opacity-10"
                       style={{ background: "radial-gradient(circle at 80% 20%, white, transparent 60%)" }}
@@ -168,7 +177,7 @@ export default async function PoslechPage() {
                         {likeCount}
                       </div>
                     )}
-                    <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: isLast ? 120 : 160 }}>
+                    <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: 160 }}>
                       <div
                         className="flex h-11 w-11 items-center justify-center rounded-xl"
                         style={{ background: "oklch(1 0 0 / 0.15)" }}

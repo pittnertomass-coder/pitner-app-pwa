@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Dumbbell, Utensils, Brain, Zap } from "lucide-react";
+import { ChevronLeft, Dumbbell, Utensils, Brain, Zap, Pill } from "lucide-react";
 import type { Profile, AudioTrack } from "@/types/database";
 import { TrackCardButton } from "@/components/track-card-button";
 import { SeriesEndPrompt } from "@/components/series-end-prompt";
@@ -44,6 +44,14 @@ const CATEGORY_META: Record<string, {
     gradient: "linear-gradient(135deg, oklch(0.65 0.22 32), oklch(0.45 0.20 22))",
     dbCategory: "motivace",
     pillar: 4,
+  },
+  suplementy: {
+    label: "Suplementační realita",
+    subtitle: "Co funguje a co je mýtus",
+    icon: Pill,
+    gradient: "linear-gradient(135deg, oklch(0.52 0.18 232), oklch(0.35 0.14 232))",
+    dbCategory: "suplementy",
+    pillar: 5,
   },
 };
 
