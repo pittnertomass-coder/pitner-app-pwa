@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Headphones, Dumbbell, Utensils, Brain, Zap } from "lucide-react";
+import { Headphones, Dumbbell, Utensils, Brain, Zap, ThumbsUp } from "lucide-react";
 import type { Profile } from "@/types/database";
 import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
 
 const CATEGORIES = [
   {
     id: "telo",
+    dbCategory: "telo",
     label: "Tělo",
     subtitle: "Pohyb, regenerace a výkon",
     icon: Dumbbell,
@@ -16,6 +17,7 @@ const CATEGORIES = [
   },
   {
     id: "strava",
+    dbCategory: "strava",
     label: "Strava",
     subtitle: "Výživa a energie",
     icon: Utensils,
@@ -25,6 +27,7 @@ const CATEGORIES = [
   },
   {
     id: "mysl",
+    dbCategory: "mysleni",
     label: "Mysl",
     subtitle: "Mindset a psychika",
     icon: Brain,
@@ -34,6 +37,7 @@ const CATEGORIES = [
   },
   {
     id: "motivace",
+    dbCategory: "motivace",
     label: "Motivace",
     subtitle: "Facka realitou",
     icon: Zap,
@@ -47,6 +51,8 @@ export default async function PoslechPage() {
   const devMode = await isDevBypass();
 
   let profile: Pick<Profile, "is_premium"> | null;
+  // Počty lajků per série: { telo: 12, strava: 3, mysleni: 7, motivace: 0 }
+  let seriesLikes: Record<string, number> = {};
 
   if (devMode) {
     profile = DEV_PROFILE;
@@ -56,13 +62,17 @@ export default async function PoslechPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    const profileRes = await supabase
-      .from("profiles")
-      .select("is_premium")
-      .eq("id", user.id)
-      .single();
+    const [profileRes, likesRes] = await Promise.all([
+      supabase.from("profiles").select("is_premium").eq("id", user.id).single(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabase as any).from("podcast_series_likes").select("category") as Promise<{ data: Array<{ category: string }> | null }>,
+    ]);
 
     profile = profileRes.data as Pick<Profile, "is_premium"> | null;
+
+    for (const row of likesRes.data ?? []) {
+      seriesLikes[row.category] = (seriesLikes[row.category] ?? 0) + 1;
+    }
   }
 
   const isPremium = profile?.is_premium ?? false;
@@ -94,6 +104,7 @@ export default async function PoslechPage() {
           {/* Hero karta – TĚLO */}
           {CATEGORIES.filter((c) => c.hero).map((cat) => {
             const Icon = cat.icon;
+            const likeCount = seriesLikes[cat.dbCategory] ?? 0;
             return (
               <Link key={cat.id} href={`/poslech/${cat.id}`}>
                 <div
@@ -103,6 +114,14 @@ export default async function PoslechPage() {
                   <div className="absolute inset-0 opacity-10"
                     style={{ background: "radial-gradient(circle at 80% 50%, white, transparent 60%)" }}
                   />
+                  {/* Odznak s počtem lajků */}
+                  {likeCount > 0 && (
+                    <div className="absolute top-4 right-4 z-20 flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold text-white"
+                      style={{ background: "oklch(0 0 0 / 0.30)" }}>
+                      <ThumbsUp className="h-3 w-3" style={{ fill: "white" }} />
+                      {likeCount}
+                    </div>
+                  )}
                   <div className="relative z-10 p-7 flex flex-col justify-between h-full" style={{ minHeight: 180 }}>
                     <div
                       className="flex h-14 w-14 items-center justify-center rounded-2xl"
@@ -131,6 +150,7 @@ export default async function PoslechPage() {
             {CATEGORIES.filter((c) => !c.hero).map((cat, i) => {
               const Icon = cat.icon;
               const isLast = i === CATEGORIES.filter((c) => !c.hero).length - 1;
+              const likeCount = seriesLikes[cat.dbCategory] ?? 0;
               return (
                 <Link key={cat.id} href={`/poslech/${cat.id}`} className={isLast ? "col-span-2" : ""}>
                   <div
@@ -140,6 +160,14 @@ export default async function PoslechPage() {
                     <div className="absolute inset-0 opacity-10"
                       style={{ background: "radial-gradient(circle at 80% 20%, white, transparent 60%)" }}
                     />
+                    {/* Odznak s počtem lajků */}
+                    {likeCount > 0 && (
+                      <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold text-white"
+                        style={{ background: "oklch(0 0 0 / 0.30)" }}>
+                        <ThumbsUp className="h-2.5 w-2.5" style={{ fill: "white" }} />
+                        {likeCount}
+                      </div>
+                    )}
                     <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: isLast ? 120 : 160 }}>
                       <div
                         className="flex h-11 w-11 items-center justify-center rounded-xl"
