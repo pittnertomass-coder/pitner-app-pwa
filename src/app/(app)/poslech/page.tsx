@@ -161,9 +161,9 @@ export default async function PoslechPage() {
               const Icon = cat.icon;
               const likeCount = seriesLikes[cat.dbCategory] ?? 0;
               return (
-                <Link key={cat.id} href={`/poslech/${cat.id}`}>
+                <Link key={cat.id} href={`/poslech/${cat.id}`} className="h-full block">
                   <div
-                    className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-[0.97] transition-transform duration-200"
+                    className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-[0.97] transition-transform duration-200 h-full"
                     style={{ background: cat.gradient, minHeight: 160 }}
                   >
                     <div className="absolute inset-0 opacity-10"
@@ -176,7 +176,7 @@ export default async function PoslechPage() {
                         {likeCount}
                       </div>
                     )}
-                    <div className="relative z-10 p-5 flex flex-col justify-between" style={{ minHeight: 160 }}>
+                    <div className="relative z-10 p-5 flex flex-col justify-between h-full">
                       <div
                         className="flex h-11 w-11 items-center justify-center rounded-xl"
                         style={{ background: "oklch(1 0 0 / 0.15)" }}
