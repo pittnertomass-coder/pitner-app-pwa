@@ -116,6 +116,38 @@ export interface Database {
           order_index?: number;
         };
       };
+      audio_track_likes: {
+        Row: {
+          id: string;
+          user_id: string;
+          track_id: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          track_id: string;
+        };
+        Update: {
+          user_id?: string;
+          track_id?: string;
+        };
+      };
+      podcast_series_likes: {
+        Row: {
+          id: string;
+          user_id: string;
+          category: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          category: string;
+        };
+        Update: {
+          user_id?: string;
+          category?: string;
+        };
+      };
       klinika_requests: {
         Row: {
           id: string;

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronLeft, Dumbbell, Utensils, Brain, Zap } from "lucide-react";
 import type { Profile, AudioTrack } from "@/types/database";
 import { TrackCardButton } from "@/components/track-card-button";
+import { SeriesEndPrompt } from "@/components/series-end-prompt";
 
 const CATEGORY_META: Record<string, {
   label: string;
@@ -58,6 +59,13 @@ export default async function PoslechCategoryPage({
   const openAccess = process.env.OPEN_ACCESS === "1";
 
   let tracks: AudioTrack[] | null;
+  // Mapa počtu lajků per track: { [trackId]: počet }
+  let likeCounts: Record<string, number> = {};
+  // Sada ID tracků, které lajkoval přihlášený uživatel
+  let userLikedSet = new Set<string>();
+  // Lajky celé série
+  let seriesCount = 0;
+  let userLikedSeries = false;
 
   if (openAccess) {
     const { createClient } = await import("@/lib/supabase/server");
@@ -88,9 +96,38 @@ export default async function PoslechCategoryPage({
     const profile = profileRes.data as Pick<Profile, "is_premium"> | null;
     if (!profile?.is_premium) redirect("/poslech");
     tracks = tracksRes.data as AudioTrack[] | null;
+
+    // Načteme lajky jen pokud jsou nějaké tracky
+    if (tracks && tracks.length > 0) {
+      const trackIds = tracks.map(t => t.id);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const db = supabase as any;
+
+      const [allLikesRes, userLikesRes, seriesCountRes, userSeriesLikeRes] = await Promise.all([
+        // Všechny lajky pro tyto tracky (pro počítadla)
+        db.from("audio_track_likes").select("track_id").in("track_id", trackIds) as Promise<{ data: Array<{ track_id: string }> | null }>,
+        // Lajky tohoto uživatele (pro stav tlačítka)
+        db.from("audio_track_likes").select("track_id").eq("user_id", user.id).in("track_id", trackIds) as Promise<{ data: Array<{ track_id: string }> | null }>,
+        // Počet lajků celé série
+        db.from("podcast_series_likes").select("*", { count: "exact", head: true }).eq("category", meta.dbCategory) as Promise<{ count: number | null }>,
+        // Jestli uživatel lajkoval sérii
+        db.from("podcast_series_likes").select("id").eq("user_id", user.id).eq("category", meta.dbCategory).single() as Promise<{ data: { id: string } | null }>,
+      ]);
+
+      // Spočítáme lajky per track
+      for (const like of allLikesRes.data ?? []) {
+        likeCounts[like.track_id] = (likeCounts[like.track_id] ?? 0) + 1;
+      }
+      userLikedSet = new Set((userLikesRes.data ?? []).map(l => l.track_id));
+      seriesCount = seriesCountRes.count ?? 0;
+      userLikedSeries = !!userSeriesLikeRes.data;
+    }
   }
 
   const Icon = meta.icon;
+  // Série je kompletní když má 10+ epizod
+  const seriesComplete = (tracks?.length ?? 0) >= 10;
 
   return (
     <div className="min-h-full flex flex-col">
@@ -129,13 +166,28 @@ export default async function PoslechCategoryPage({
         </div>
       </div>
 
-      {/* Seznam audio stop */}
+      {/* Seznam epizod */}
       <div className="flex-1 px-5 py-6 md:px-10 max-w-xl mx-auto w-full">
         {tracks && tracks.length > 0 ? (
           <div className="flex flex-col gap-3">
             {tracks.map((track, i) => (
-              <TrackCardButton key={track.id} track={track} index={i + 1} />
+              <TrackCardButton
+                key={track.id}
+                track={track}
+                index={i + 1}
+                likeCount={likeCounts[track.id] ?? 0}
+                userLiked={userLikedSet.has(track.id)}
+              />
             ))}
+
+            {/* End-of-series prompt — zobrazí se po 10 epizodách */}
+            {seriesComplete && (
+              <SeriesEndPrompt
+                category={meta.dbCategory}
+                initialCount={seriesCount}
+                initialLiked={userLikedSeries}
+              />
+            )}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center gap-3">

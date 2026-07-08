@@ -3,9 +3,17 @@
 import { Play, Pause } from "lucide-react";
 import { useAudioSheetStore } from "@/store/audio-sheet-store";
 import { usePlayerStore } from "@/store/player-store";
+import { TrackLikeButton } from "@/components/like-button";
 import type { AudioTrack } from "@/types/database";
 
-export function TrackCardButton({ track, index }: { track: AudioTrack; index?: number }) {
+interface TrackCardButtonProps {
+  track: AudioTrack;
+  index?: number;
+  likeCount?: number;
+  userLiked?: boolean;
+}
+
+export function TrackCardButton({ track, index, likeCount = 0, userLiked = false }: TrackCardButtonProps) {
   const { openAudio } = useAudioSheetStore();
   const { currentTrack, isPlaying } = usePlayerStore();
 
@@ -14,10 +22,13 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
   const minutes = track.duration_seconds > 0 ? Math.ceil(track.duration_seconds / 60) : null;
 
   return (
-    <button
+    // Vnější div místo buttonu — umožňuje mít uvnitř samostatné lajk tlačítko
+    <div
+      role="button"
+      tabIndex={hasAudio ? 0 : -1}
       onClick={() => hasAudio && openAudio(track)}
-      disabled={!hasAudio}
-      className="group relative overflow-hidden rounded-2xl p-4 flex items-center gap-4 w-full text-left transition-all duration-200 active:scale-[0.98]"
+      onKeyDown={(e) => e.key === "Enter" && hasAudio && openAudio(track)}
+      className="group relative overflow-hidden rounded-2xl p-4 flex items-center gap-4 w-full text-left transition-all duration-200 active:scale-[0.98] cursor-pointer"
       style={
         isActive
           ? {
@@ -30,13 +41,13 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
             }
       }
     >
-      {/* Left accent bar */}
+      {/* Levý barevný proužek */}
       <span
         className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl"
         style={{ background: isActive ? "rgba(255,255,255,0.4)" : "oklch(0.45 0.10 168 / 0.5)" }}
       />
 
-      {/* Number badge */}
+      {/* Číslo epizody */}
       {index !== undefined && (
         <span
           className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold tabular-nums"
@@ -49,7 +60,7 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
         </span>
       )}
 
-      {/* Title + duration */}
+      {/* Název + délka + lajk */}
       <div className="flex-1 min-w-0 pl-1">
         <p
           className="font-semibold text-sm leading-snug line-clamp-2"
@@ -57,17 +68,25 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
         >
           {track.title}
         </p>
-        {minutes && (
-          <p
-            className="text-xs mt-0.5"
-            style={{ color: isActive ? "rgba(255,255,255,0.65)" : "oklch(0.55 0.07 168)" }}
-          >
-            {minutes} min
-          </p>
-        )}
+        <div className="flex items-center gap-3 mt-0.5">
+          {minutes && (
+            <p
+              className="text-xs"
+              style={{ color: isActive ? "rgba(255,255,255,0.65)" : "oklch(0.55 0.07 168)" }}
+            >
+              {minutes} min
+            </p>
+          )}
+          {/* Lajk tlačítko — stopPropagation zabrání spuštění přehrávače */}
+          <TrackLikeButton
+            trackId={track.id}
+            initialCount={likeCount}
+            initialLiked={userLiked}
+          />
+        </div>
       </div>
 
-      {/* Play indicator / Brzy */}
+      {/* Play / Pause indikátor */}
       <div
         className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl transition-colors"
         style={{ background: isActive ? "rgba(255,255,255,0.15)" : "oklch(0.25 0.07 168 / 0.6)" }}
@@ -86,6 +105,6 @@ export function TrackCardButton({ track, index }: { track: AudioTrack; index?: n
           <Play className="h-4 w-4" style={{ color: "#00D4A0", marginLeft: 1 }} fill="#00D4A0" />
         )}
       </div>
-    </button>
+    </div>
   );
 }
