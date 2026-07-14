@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Dumbbell, Utensils, Brain, Zap, Pill } from "lucide-react";
+import { ChevronLeft, Dumbbell, Utensils, Brain, Zap, Pill, Scale } from "lucide-react";
 import type { Profile, AudioTrack } from "@/types/database";
 import { TrackCardButton } from "@/components/track-card-button";
 import { SeriesEndPrompt } from "@/components/series-end-prompt";
@@ -52,6 +52,14 @@ const CATEGORY_META: Record<string, {
     gradient: "linear-gradient(135deg, oklch(0.52 0.18 232), oklch(0.35 0.14 232))",
     dbCategory: "suplementy",
     pillar: 5,
+  },
+  obezita: {
+    label: "Obezita a metabolická past",
+    subtitle: "Tělo v pasti vlastní váhy",
+    icon: Scale,
+    gradient: "linear-gradient(135deg, oklch(0.50 0.16 200), oklch(0.33 0.12 200))",
+    dbCategory: "obezita",
+    pillar: 6,
   },
 };
 

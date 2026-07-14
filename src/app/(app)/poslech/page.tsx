@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Headphones, Dumbbell, Utensils, Brain, Zap, Pill, ThumbsUp } from "lucide-react";
+import { Headphones, Dumbbell, Utensils, Brain, Zap, Pill, Scale, ThumbsUp } from "lucide-react";
 import type { Profile } from "@/types/database";
 import { isDevBypass, DEV_PROFILE } from "@/lib/dev-mock";
 
@@ -53,6 +53,16 @@ const CATEGORIES = [
     icon: Pill,
     gradient: "linear-gradient(135deg, oklch(0.52 0.18 232), oklch(0.35 0.14 232))",
     accent: "#38BDF8",
+    hero: false,
+  },
+  {
+    id: "obezita",
+    dbCategory: "obezita",
+    label: "Obezita a metabolická past",
+    subtitle: "Tělo v pasti vlastní váhy",
+    icon: Scale,
+    gradient: "linear-gradient(135deg, oklch(0.50 0.16 200), oklch(0.33 0.12 200))",
+    accent: "#06B6D4",
     hero: false,
   },
 ];
@@ -157,11 +167,13 @@ export default async function PoslechPage() {
 
           {/* 2×2 grid – Strava, Mysl, Motivace, Suplementy */}
           <div className="grid grid-cols-2 gap-4">
-            {CATEGORIES.filter((c) => !c.hero).map((cat, i) => {
+            {CATEGORIES.filter((c) => !c.hero).map((cat, i, arr) => {
               const Icon = cat.icon;
               const likeCount = seriesLikes[cat.dbCategory] ?? 0;
+              // Pokud je lichý počet karet, poslední zabere celou šířku
+              const isFull = arr.length % 2 === 1 && i === arr.length - 1;
               return (
-                <Link key={cat.id} href={`/poslech/${cat.id}`} className="h-full block">
+                <Link key={cat.id} href={`/poslech/${cat.id}`} className={`h-full block${isFull ? " col-span-2" : ""}`}>
                   <div
                     className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-[0.97] transition-transform duration-200 h-full"
                     style={{ background: cat.gradient, minHeight: 160 }}
